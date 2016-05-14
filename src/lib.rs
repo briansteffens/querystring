@@ -11,11 +11,11 @@ pub fn parse(querystring: &str)
 
         let kv: Vec<&str> = part.split('=').collect();
 
-        if kv.len() != 2 {
-            return Err("Invalid querystring format");
-        }
-
-        ret.insert(String::from(kv[0]), String::from(kv[1]));
+        ret.insert(String::from(kv[0]), String::from(match kv.len() {
+            1 => "",
+            2 => kv[1],
+            _ => return Err("Invalid querystring format"),
+        }));
     }
 
     Ok(ret)
@@ -58,6 +58,16 @@ mod tests {
     #[test]
     fn empty_value() {
         let parsed = parse("nothing=").unwrap();
+
+        assert_eq!(parsed.len(), 1);
+
+        assert!(parsed.contains_key("nothing"));
+        assert_eq!(parsed.get("nothing").unwrap(), "");
+    }
+
+    #[test]
+    fn no_equal_sign() {
+        let parsed = parse("nothing").unwrap();
 
         assert_eq!(parsed.len(), 1);
 
