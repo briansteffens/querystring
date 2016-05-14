@@ -1,0 +1,6 @@
+[package]
+name = "querystring"
+version = "0.1.0"
+authors = ["Brian Steffens <briansteffens@gmail.com>"]
+
+[dependencies]
